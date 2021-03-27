@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
-    id 'com.google.protobuf'
     id 'kotlin-android'
+    id 'com.squareup.wire'
 }
 
 android {
@@ -42,37 +42,16 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
-    api "io.grpc:grpc-protobuf-lite:1.36.0"
-
-    implementation "io.grpc:grpc-protobuf-lite:1.36.0"
-    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
-    api "io.grpc:grpc-kotlin-stub-lite:1.0.0"
-    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation "com.squareup.wire:wire-grpc-client:$wire_version"
+    api "com.squareup.wire:wire-runtime:$wire_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
 
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:4.0.0-rc-2"
-    }
-    plugins {
-        grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.36.0'
-        }
-        grpckt {
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:1.0.0:jdk7@jar"
-        }
-    }
-    generateProtoTasks {
-        all().each { task ->
-            task.plugins {
-                grpc { option 'lite' }
-                grpckt { option 'lite' }
-            }
-        }
+wire {
+    kotlin {
+        rpcRole = 'client'
     }
 }
